@@ -1,0 +1,55 @@
+<html>
+    <body>
+        <form id="cadastro">
+            <label for="nome">Nome Completo:</label><br>
+            <input type="text" id="nome" name="nome"><br>
+            <label for="time">Time:</label><br>
+            <input type="text" id="time" name="time"><br>
+            <label for="pos">Posição:</label><br>
+            <select id = "combinacao"><br>
+                <option value="Levantador" >Levantador</option>
+                <option value="Atacante" >Atacante</option>
+                <option value="Cortador" >Cortador</option>
+                <option value="Bloqueador" >Bloqueador</option>
+                <option value="Saque" >Saque</option>
+                <option value="Defesa" >Defesa</option>
+            </select>
+            <button type="submit" value="submit">Cadastrar</button>
+        </form>
+        <div>
+            <!-- <input type="text" id="resp" name="resp" /> -->
+            <p id="resp"></p>
+        </div> 
+
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script type="text/javascript">
+            $('#cadastro').submit(function(e) {
+                    e.preventDefault();
+
+                    var objeto = {
+                       nome:$('[name=nome]').val(),
+                       time:$('[name=time]').val(),
+                       combo:$('#combinacao option:selected').text()
+                    }
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/retorno',
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(objeto),
+                        success: function(callback) {
+                            console.log(callback);
+                            $('#resp').append('Resposta: ' + callback.nome + ' - '+ callback.time + ' - '+ callback.combo + ' | ');
+                            $('[name=nome]').val("");
+                            $('[name=time]').val("");
+                            $('#combinacao').val(1)
+                        },
+                        error: function() {
+                            $(this).html("error!");
+                        }
+                    });
+                });
+        </script>
+    </body>
+</html>
